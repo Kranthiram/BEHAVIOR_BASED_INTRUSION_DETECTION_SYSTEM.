@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BBIDS - Home</title>
+</head>
+
+<body style="margin:0;font-family:Segoe UI;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:white;overflow-x:hidden;">
+
+<!-- NAVBAR (Old UI Style) -->
+<div style="background:rgba(0,0,0,0.4);
+padding:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;">
+
+<div style="font-size:22px;font-weight:bold;">🛡️ BIDS Security</div>
+
+<div>
+<a href="index.html" style="color:white;margin:15px;text-decoration:none;">Home</a>
+<a href="simulate.html" style="color:white;margin:15px;text-decoration:none;">Detect</a>
+<a href="about.html" style="color:white;margin:15px;text-decoration:none;">About</a>
+<a href="contact.html" style="color:white;margin:15px;text-decoration:none;">Contact</a>
+<a href="simulate.html" style="color:white;margin:15px;text-decoration:none;">Simulation</a>
+<a href="display.html" style="color:white;margin:15px;text-decoration:none;">Display</a>
+<a href="graph.html" style="color:white;margin:15px;text-decoration:none;">Graph</a>
+<a href="Login.html" style="color:white;margin:15px;text-decoration:none;">Logout</a>
+</div>
+
+</div>
+
+<!-- MOVING TEXT (Replaced <p> with marquee UI) -->
+<div style="white-space:nowrap;overflow:hidden;background:#111827;padding:8px;">
+<div style="display:inline-block;padding-left:100%;animation:marquee 12s linear infinite;">
+🚨 Real-Time Intrusion Monitoring | AI Powered Threat Detection 🚨
+</div>
+</div>
+
+<!-- HOME SECTION (Old UI Style Applied) -->
+<div style="text-align:center;padding:80px 20px;">
+
+<h1 style="font-size:42px;margin:20px 0;">
+Behaviour-Based Intrusion Detection System
+</h1>
+
+<p style="font-size:18px;color:#cbd5e1;margin-bottom:40px;">
+Detect abnormal user behaviour using Machine Learning
+</p>
+
+<!-- BUTTON (Old Style) -->
+<a href="simulate.html">
+<button style="
+padding:12px 30px;
+background:#22c55e;
+border:none;
+border-radius:30px;
+color:white;
+font-size:16px;
+cursor:pointer;">
+Start Detection
+</button>
+</a>
+
+<!-- STATS (KEEPED SAME LOGIC, ONLY STYLE SLIGHTLY ADJUSTED) -->
+<div style="margin-top:60px;display:flex;justify-content:center;gap:30px;flex-wrap:wrap;">
+
+<div style="background:#111827;padding:20px;border-radius:10px;min-width:150px;">
+<div style="font-size:28px;font-weight:bold;" id="normalCount">-</div>
+<div style="color:#94a3b8;">Normal Events</div>
+</div>
+
+<div style="background:#111827;padding:20px;border-radius:10px;min-width:150px;">
+<div style="font-size:28px;font-weight:bold;" id="anomalyCount">-</div>
+<div style="color:#94a3b8;">Anomalies Detected</div>
+</div>
+
+</div>
+
+</div>
+
+<!-- SCRIPT (UNCHANGED LOGIC) -->
+<script>
+async function loadStats() {
+    try {
+        const response = await fetch('http://localhost:5000/api/logs');
+        const logs = await response.json();
+        const normal = logs.filter(l => l.is_anomaly !== true).length;
+        const anomaly = logs.filter(l => l.is_anomaly === true).length;
+        document.getElementById('normalCount').innerText = normal;
+        document.getElementById('anomalyCount').innerText = anomaly;
+    } catch(e) {
+        console.error('Stats error:', e);
+        document.getElementById('normalCount').innerText = '0';
+        document.getElementById('anomalyCount').innerText = '0';
+    }
+}
+loadStats();
+setInterval(loadStats, 5000);
+</script>
+
+<!-- MARQUEE ANIMATION -->
+<style>
+@keyframes marquee{
+0%{transform:translateX(0);}
+100%{transform:translateX(-100%);}
+}
+</style>
+
+</body>
+</html>

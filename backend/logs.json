@@ -1,0 +1,175 @@
+[
+  {
+    "client_ip": "127.0.0.1",
+    "method": "GET",
+    "host": "127.0.0.1",
+    "path": "/",
+    "url": "http://127.0.0.1:8080/",
+    "payload_size": 0,
+    "timestamp": 1776276961.0866177,
+    "login_hour": 23,
+    "files_accessed": 1,
+    "cpu_usage": 0,
+    "network_packets": 0,
+    "source": "mitm_proxy",
+    "is_anomaly": true,
+    "timestamp_received": 1776276961713
+  },
+  {
+    "client_ip": "127.0.0.1",
+    "method": "GET",
+    "host": "127.0.0.1",
+    "path": "/favicon.ico",
+    "url": "http://127.0.0.1:8080/favicon.ico",
+    "payload_size": 0,
+    "timestamp": 1776276961.8911643,
+    "login_hour": 23,
+    "files_accessed": 1,
+    "cpu_usage": 0,
+    "network_packets": 0,
+    "source": "mitm_proxy",
+    "is_anomaly": true,
+    "timestamp_received": 1776276962434
+  },
+  {
+    "cpu_usage": 95,
+    "is_anomaly": true,
+    "source": "test",
+    "files_accessed": 99,
+    "login_hour": 3,
+    "network_packets": 5000,
+    "timestamp_received": 1776278035429
+  },
+  {
+    "cpu_usage": 95,
+    "is_anomaly": true,
+    "source": "test",
+    "files_accessed": 99,
+    "login_hour": 3,
+    "network_packets": 5000,
+    "timestamp_received": 1776351004048
+  },
+  {
+    "source": "detect_page",
+    "login_hour": 10,
+    "files_accessed": 200,
+    "cpu_usage": 26,
+    "network_packets": 600,
+    "is_anomaly": true,
+    "timestamp": 1776351311876,
+    "timestamp_received": 1776351311879
+  },
+  {
+    "source": "detect_page",
+    "login_hour": 9,
+    "files_accessed": 15,
+    "cpu_usage": 30,
+    "network_packets": 500,
+    "is_anomaly": false,
+    "timestamp": 1776351318842,
+    "timestamp_received": 1776351318847
+  },
+  {
+    "source": "detect_page",
+    "login_hour": 9,
+    "files_accessed": 15,
+    "cpu_usage": 3000,
+    "network_packets": 500,
+    "is_anomaly": true,
+    "timestamp": 1776352578463,
+    "timestamp_received": 1776352578467
+  },
+  {
+    "source": "simulate_page",
+    "login_hour": 12,
+    "files_accessed": 200,
+    "cpu_usage": 69,
+    "network_packets": 100,
+    "is_anomaly": true,
+    "timestamp": 1776353473504,
+    "timestamp_received": 1776353473507
+  },
+  {
+    "source": "simulate_page",
+    "login_hour": 7,
+    "files_accessed": 6,
+    "cpu_usage": 20,
+    "network_packets": 200,
+    "is_anomaly": false,
+    "timestamp": 1776354666338,
+    "timestamp_received": 1776354666341
+  },
+  {
+    "source": "simulate_page",
+    "login_hour": 15,
+    "files_accessed": 2000,
+    "cpu_usage": 30,
+    "network_packets": 400,
+    "is_anomaly": true,
+    "timestamp": 1776355667614,
+    "timestamp_received": 1776355667616
+  },
+  {
+    "source": "simulate_page",
+    "login_hour": 10,
+    "files_accessed": 15,
+    "cpu_usage": 30,
+    "network_packets": 200,
+    "is_anomaly": false,
+    "timestamp": 1776356469728,
+    "timestamp_received": 1776356469731
+  },
+  {
+    "source": "simulate_page",
+    "login_hour": 12,
+    "files_accessed": 20,
+    "cpu_usage": 40,
+    "network_packets": 500,
+    "is_anomaly": false,
+    "timestamp": 1776626058864,
+    "timestamp_received": 1776626058866
+  },
+  {
+    "source": "simulate_page",
+    "login_hour": null,
+    "files_accessed": null,
+    "cpu_usage": null,
+    "network_packets": null,
+    "is_anomaly": false,
+    "timestamp": 1776626264343,
+    "timestamp_received": 1776626264345
+  },
+  {
+    "timestamp_received": 1776626735765
+  },
+  {
+    "source": "simulate_page",
+    "login_hour": 13,
+    "files_accessed": 200,
+    "cpu_usage": 60,
+    "network_packets": 1000,
+    "is_anomaly": true,
+    "timestamp": 1776661328549,
+    "timestamp_received": 1776661328552
+  },
+  {
+    "source": "simulate_page",
+    "login_hour": 9,
+    "files_accessed": 15,
+    "cpu_usage": 30,
+    "network_packets": 500,
+    "is_anomaly": false,
+    "timestamp": 1776661336440,
+    "timestamp_received": 1776661336443
+  },
+  {
+    "source": "simulate_page",
+    "login_hour": 7,
+    "files_accessed": 300,
+    "cpu_usage": 90,
+    "network_packets": 700,
+    "is_anomaly": true,
+    "timestamp": 1776662128096,
+    "timestamp_received": 1776662128102
+  }
+]

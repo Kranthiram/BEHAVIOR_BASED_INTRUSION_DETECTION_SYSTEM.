@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BBIDS - Secure Login</title>
+</head>
+<body style="margin:0;font-family:Arial;background:#eef2f7;">
+
+<div style="background:#1e3a8a;color:white;padding:15px;display:flex;justify-content:space-between;">
+    <div style="font-size:22px;font-weight:bold;">🔐 BBIDS Security</div>
+    <div>
+        <a href="index.html" style="color:white;margin:0 15px;text-decoration:none;">Home</a>
+        <a href="Login.html" style="color:white;margin:0 15px;text-decoration:none;">Login</a>
+        <a href="Register.html" style="color:white;margin:0 15px;text-decoration:none;">Register</a>
+    </div>
+</div>
+
+<div style="text-align:center;margin-top:60px;">
+    <h2>Secure Login</h2>
+    <div style="background:white;padding:30px;border-radius:10px;width:350px;margin:auto;box-shadow:0 0 10px rgba(0,0,0,0.1);">
+        <input id="username" placeholder="Username" 
+            style="padding:12px;margin:10px;width:250px;border:1px solid #ccc;border-radius:5px;"><br>
+        <input id="password" type="password" placeholder="Password" 
+            style="padding:12px;margin:10px;width:250px;border:1px solid #ccc;border-radius:5px;"><br>
+        <button onclick="login()" 
+            style="padding:12px 30px;background:#16a34a;color:white;border:none;border-radius:5px;cursor:pointer;">
+            Login
+        </button>
+        <p style="margin-top:15px;"><a href="forgot.html" style="color:#1e3a8a;">Forgot Password?</a></p>
+    </div>
+    <div id="alertBox" style="margin-top:20px;"></div>
+</div>
+
+<script>
+let failedAttempts = 0;
+
+async function login() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    
+    try {
+        const response = await fetch('http://localhost:5000/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+        
+        if (response.ok) {
+            showAlert("✅ Login Successful", "#16a34a");
+            localStorage.setItem('loggedInUser', username);
+            failedAttempts = 0;
+            setTimeout(() => { window.location.href = "index.html"; }, 1000);
+        } else {
+            failedAttempts++;
+            if (failedAttempts >= 3) {
+                showAlert("🚨 Intrusion Detected: Multiple Failed Attempts", "#dc2626");
+                // Log anomaly to backend
+                await fetch('http://localhost:5000/api/log-event', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        source: 'login_page',
+                        event: 'multiple_failed_logins',
+                        attempts: failedAttempts,
+                        is_anomaly: true,
+                        timestamp: Date.now()
+                    })
+                });
+            } else {
+                showAlert("❌ Invalid Credentials", "#f59e0b");
+            }
+        }
+    } catch (error) {
+        showAlert("⚠️ Backend not connected", "#dc2626");
+    }
+}
+
+function showAlert(message, color) {
+    const box = document.getElementById("alertBox");
+    box.innerHTML = `<div style="background:${color};color:white;padding:15px;border-radius:8px;width:300px;margin:auto;">${message}</div>`;
+    setTimeout(() => { box.innerHTML = ""; }, 3000);
+}
+</script>
+</body>
+</html>

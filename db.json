@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "login_hour": 10,
+      "files_accessed": 4,
+      "cpu_usage": 30,
+      "network_packets": 120
+    },
+    {
+      "id": "585d",
+      "login_hour": "8",
+      "files_accessed": "2",
+      "cpu_usage": "7",
+      "network_packets": "8"
+    }
+  ]
+}

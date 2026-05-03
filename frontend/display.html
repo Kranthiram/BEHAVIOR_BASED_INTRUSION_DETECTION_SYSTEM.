@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BBIDS - Stored Records</title>
+</head>
+<body style="margin:0;font-family:Arial;background:#0f172a;color:white;">
+
+<div style="background:#1e3a8a;padding:15px;display:flex;justify-content:space-between;flex-wrap:wrap;">
+    <div style="font-size:22px;font-weight:bold;">📊 BBIDS Security</div>
+    <div>
+        <a href="index.html" style="color:white;margin:0 10px;text-decoration:none;">Home</a>
+        <a href="display.html" style="color:white;margin:0 10px;text-decoration:none;background:#2563eb;padding:5px 10px;border-radius:5px;">Display</a>
+        <a href="graph.html" style="color:white;margin:0 10px;text-decoration:none;">Graph</a>
+        <a href="Login.html" style="color:white;margin:0 10px;text-decoration:none;">Logout</a>
+    </div>
+</div>
+
+<div style="text-align:center;padding:40px;">
+    <h1>Stored Behaviour Records</h1>
+    <button onclick="loadData()" 
+        style="padding:10px 20px;background:#22c55e;border:none;color:white;border-radius:5px;cursor:pointer;margin-bottom:20px;">
+        Load Data
+    </button>
+    
+    <div style="overflow-x:auto;">
+        <table style="margin:auto;width:80%;border-collapse:collapse;background:white;color:black;border-radius:10px;overflow:hidden;">
+            <thead style="background:#1e3a8a;color:white;">
+                <tr>
+                    <th style="padding:12px;">Login Hour</th>
+                    <th style="padding:12px;">Files Accessed</th>
+                    <th style="padding:12px;">CPU Usage</th>
+                    <th style="padding:12px;">Network Packets</th>
+                    <th style="padding:12px;">Status</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr><td colspan="5" style="text-align:center;padding:20px;">Click "Load Data" to fetch records</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+async function loadData() {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;">Loading...</td></tr>';
+    
+    try {
+        const response = await fetch('http://localhost:5000/api/logs');
+        const logs = await response.json();
+        
+        if (logs.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;">No records found. Go to Simulation page and analyze behavior.</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = '';
+        logs.slice(-20).reverse().forEach(log => {
+            const isAnomaly = log.is_anomaly === true;
+            tbody.innerHTML += `
+                <tr style="border-bottom:1px solid #ddd;text-align:center;">
+                    <td style="padding:10px;">${log.login_hour || '-'}</td>
+                    <td style="padding:10px;">${log.files_accessed || '-'}</td>
+                    <td style="padding:10px;">${log.cpu_usage || '-'}</td>
+                    <td style="padding:10px;">${log.network_packets || '-'}</td>
+                    <td style="padding:10px;">
+                        <span style="background:${isAnomaly ? '#dc2626' : '#22c55e'};color:white;padding:3px 10px;border-radius:12px;">
+                            ${isAnomaly ? 'ANOMALY' : 'NORMAL'}
+                        </span>
+                    </td>
+                </tr>
+            `;
+        });
+    } catch (error) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:20px;color:red;">Error: ${error.message}</td></tr>`;
+    }
+}
+
+// Auto-load on page load
+loadData();
+</script>
+</body>
+</html>

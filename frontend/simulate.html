@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BBIDS - Behavior Detection</title>
+    <style>
+        .result-normal { background: #dcfce7; color: #166534; border: 1px solid #22c55e; }
+        .result-anomaly { background: #fee2e2; color: #991b1b; border: 1px solid #dc2626; }
+    </style>
+</head>
+<body style="margin:0;font-family:Arial;background:#0f172a;color:white;">
+
+<div style="background:#1e3a8a;padding:15px;display:flex;justify-content:space-between;flex-wrap:wrap;">
+    <div style="font-size:22px;font-weight:bold;">🛡️ BIDS Security</div>
+    <div>
+        <a href="index.html" style="color:white;margin:0 10px;text-decoration:none;">Home</a>
+        <a href="simulate.html" style="color:white;margin:0 10px;text-decoration:none;">Detect</a>
+        <a href="about.html" style="color:white;margin:0 10px;text-decoration:none;">About</a>
+        <a href="contact.html" style="color:white;margin:0 10px;text-decoration:none;">Contact</a>
+        <a href="simulate.html" style="color:white;margin:0 10px;text-decoration:none;background:#2563eb;padding:5px 10px;border-radius:5px;">Simulation</a>
+        <a href="display.html" style="color:white;margin:0 10px;text-decoration:none;">Display</a>
+        <a href="graph.html" style="color:white;margin:0 10px;text-decoration:none;">Graph</a>
+        <a href="Login.html" style="color:white;margin:0 10px;text-decoration:none;">Logout</a>
+    </div>
+</div>
+
+<div style="text-align:center;padding:40px;">
+    <h1>Check User Behaviour</h1>
+    
+    <div style="background:#1e293b;padding:30px;border-radius:15px;max-width:500px;margin:auto;">
+        <div style="margin:20px 0;">
+            <label>🕐 Login Hour</label>
+            <input type="number" id="loginHour" value="9" min="0" max="23" 
+                style="padding:10px;width:80%;margin-top:5px;border-radius:5px;border:none;">
+        </div>
+        <div style="margin:20px 0;">
+            <label>📁 Files Accessed</label>
+            <input type="number" id="filesAccessed" value="15" min="0" max="200" 
+                style="padding:10px;width:80%;margin-top:5px;border-radius:5px;border:none;">
+        </div>
+        <div style="margin:20px 0;">
+            <label>⚡ CPU Usage (%)</label>
+            <input type="number" id="cpuUsage" value="30" min="0" max="100" 
+                style="padding:10px;width:80%;margin-top:5px;border-radius:5px;border:none;">
+        </div>
+        <div style="margin:20px 0;">
+            <label>🌐 Network Packets</label>
+            <input type="number" id="networkPackets" value="500" min="0" max="10000" 
+                style="padding:10px;width:80%;margin-top:5px;border-radius:5px;border:none;">
+        </div>
+        <button onclick="analyzeBehavior()" 
+            style="background:#3b82f6;color:white;padding:12px 30px;border:none;border-radius:8px;font-size:16px;cursor:pointer;">
+            Analyze Behaviour
+        </button>
+        <div id="result" style="margin-top:25px;"></div>
+    </div>
+</div>
+
+<script>
+async function analyzeBehavior() {
+    const loginHour = document.getElementById('loginHour').value;
+    const filesAccessed = document.getElementById('filesAccessed').value;
+    const cpuUsage = document.getElementById('cpuUsage').value;
+    const networkPackets = document.getElementById('networkPackets').value;
+    
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = '<div style="padding:15px;">⏳ Analyzing...</div>';
+    
+    try {
+        const response = await fetch('http://localhost:5000/api/predict', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                login_hour: parseFloat(loginHour),
+                files_accessed: parseFloat(filesAccessed),
+                cpu_usage: parseFloat(cpuUsage),
+                network_packets: parseFloat(networkPackets)
+            })
+        });
+        
+        const data = await response.json();
+        const isAnomaly = data.anomaly;
+        
+        resultDiv.innerHTML = `<div class="${isAnomaly ? 'result-anomaly' : 'result-normal'}" style="padding:15px;border-radius:8px;font-weight:bold;">
+            ${isAnomaly ? '🚨 ANOMALY DETECTED! Suspicious behavior detected!' : '✅ Normal behavior pattern detected'}
+        </div>`;
+        
+        // Log to backend
+        await fetch('http://localhost:5000/api/log-event', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                source: 'simulate_page',
+                login_hour: parseFloat(loginHour),
+                files_accessed: parseFloat(filesAccessed),
+                cpu_usage: parseFloat(cpuUsage),
+                network_packets: parseFloat(networkPackets),
+                is_anomaly: isAnomaly,
+                timestamp: Date.now()
+            })
+        });
+        
+    } catch (error) {
+        resultDiv.innerHTML = `<div style="background:#fef3c7;color:#92400e;padding:15px;border-radius:8px;">❌ Server Error: ${error.message}</div>`;
+    }
+}
+</script>
+</body>
+</html>

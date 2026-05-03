@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BBIDS - User Registration</title>
+</head>
+<body style="margin:0;font-family:Arial;background:#eef2f7;">
+
+<div style="background:#1e3a8a;color:white;padding:15px;display:flex;justify-content:space-between;">
+    <div style="font-size:22px;font-weight:bold;">🔐 BBIDS Security</div>
+    <div>
+        <a href="index.html" style="color:white;margin:0 15px;text-decoration:none;">Home</a>
+        <a href="Login.html" style="color:white;margin:0 15px;text-decoration:none;">Login</a>
+        <a href="Register.html" style="color:white;margin:0 15px;text-decoration:none;">Register</a>
+    </div>
+</div>
+
+<div style="text-align:center;margin-top:60px;">
+    <h2>User Registration</h2>
+    <div style="background:white;padding:30px;border-radius:10px;width:350px;margin:auto;box-shadow:0 0 10px rgba(0,0,0,0.1);">
+        <input id="username" placeholder="Username" 
+            style="padding:12px;margin:10px;width:250px;border:1px solid #ccc;border-radius:5px;"><br>
+        <input id="password" type="password" placeholder="Password" 
+            style="padding:12px;margin:10px;width:250px;border:1px solid #ccc;border-radius:5px;"><br>
+        <input id="confirm_password" type="password" placeholder="Confirm Password" 
+            style="padding:12px;margin:10px;width:250px;border:1px solid #ccc;border-radius:5px;"><br>
+        <button onclick="register()" 
+            style="padding:12px 30px;background:#1e3a8a;color:white;border:none;border-radius:5px;cursor:pointer;margin-top:10px;">
+            Register
+        </button>
+    </div>
+    <div id="message" style="margin-top:20px;"></div>
+</div>
+
+<script>
+async function register() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const confirm = document.getElementById('confirm_password').value;
+    
+    if (!username || !password) {
+        showMessage("Please fill all fields", "#f59e0b");
+        return;
+    }
+    
+    if (password !== confirm) {
+        showMessage("Passwords do not match", "#dc2626");
+        return;
+    }
+    
+    try {
+        const response = await fetch('http://localhost:5000/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+        
+        const data = await response.json();
+        if (response.ok) {
+            showMessage("✅ Registration Successful! Please login.", "#16a34a");
+            setTimeout(() => { window.location.href = "Login.html"; }, 2000);
+        } else {
+            showMessage(data.message || "Registration failed", "#dc2626");
+        }
+    } catch (error) {
+        showMessage("Server error. Make sure backend is running.", "#dc2626");
+    }
+}
+
+function showMessage(msg, color) {
+    const div = document.getElementById('message');
+    div.innerHTML = `<div style="background:${color};color:white;padding:10px;border-radius:5px;display:inline-block;">${msg}</div>`;
+}
+</script>
+</body>
+</html>
